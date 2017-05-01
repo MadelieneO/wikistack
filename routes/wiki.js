@@ -9,23 +9,22 @@ router.get('/', function(req, res, next){
 	res.redirect('/');
 });
 
+router.get('/add', function(req, res, next){
+	res.render('addpage');
+});
+
 router.post('/', function(req, res, next){
-	//console.log(req.body)
 	let title = req.body.title;
 	let content = req.body.content;
 
-    console.log('~~~ title: ', title, ' content: ', content);
-	let page = Page.build({
+	Page.create({
 		title: title,
 		content: content
-	});
-
-	page.save();
-	res.redirect('/');
-});
-
-router.get('/add', function(req, res, next){
-	res.render('addpage');
+	})
+    .then(function(page) {
+	  res.json(page);
+	})
+	.catch(console.err);
 });
 
 module.exports = router;
