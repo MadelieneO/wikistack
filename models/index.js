@@ -24,10 +24,10 @@ let Page = db.define('page', {
         route: function() { return '/wiki/' + this.urlTitle }
     },
     hooks: {
-        beforeValidate: function(page, options) {
+        // title is already provided but need to create a urlTitle and set it to the 'page' instance
+        beforeValidate: function(page) {
             if (page.title) {
-                // Removes all non-alphanumeric characters from title
-                // And make whitespace underscore
+                // Replaces withspace with underscore; then removes non-alphanumeric characters from title
                 page.urlTitle = page.title.replace(/\s+/g, '_').replace(/\W/g, '');
             } else {
                 // Generates random 5 letter string
@@ -42,9 +42,11 @@ let User = db.define('user', {
         type: Sequelize.STRING, allowNull: false
     },
     email: {
-        type: Sequelize.STRING, allowNull: false, validate: { isEmail: true }
+        type: Sequelize.STRING, allowNull: false, unique: true, validate: { isEmail: true }
     }
 });
+
+Page.belongsTo(User, {as: 'author'}); // User's PK as FK on Page (pages table), specifically: authorId
 
 module.exports = {
   Page: Page,

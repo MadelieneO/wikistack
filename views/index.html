@@ -5,5 +5,14 @@
   <hr>
   <ul class="list-unstyled">
     <!-- PLACEHOLDER LIST OF PAGES -->
+    <ul>
+      <ul>
+        {% for page in pages %}
+        <li>
+          {{ page }}
+        </li>
+        {% endfor %}
+      </ul>
+    </ul>
   </ul>
 {% endblock %}
